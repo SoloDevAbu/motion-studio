@@ -1,0 +1,35 @@
+{
+  "name": "@motion/video",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@iconify/react": "^5.2.0",
+    "@motion/schema": "workspace:*",
+    "@remotion/media": "^4.0.535",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "remotion": "^4.0.535",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^10",
+    "typescript": "^5"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./Root": "./src/Root.tsx",
+    "./compositions/*": "./src/compositions/*.tsx",
+    "./primitives/*": "./src/primitives/*.tsx",
+    "./styles/*": "./src/styles/*.ts"
+  }
+}
