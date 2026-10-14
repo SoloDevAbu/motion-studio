@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { ArrowLeft, Film, Download, CheckCircle2 } from "lucide-react";
+import type { PlayerRef } from "@remotion/player";
 import { Button } from "@workspace/ui/components/button";
 import type { FullVideoPlan } from "@motion/schema";
 import { PromptBar } from "@/components/editor/PromptBar";
 import { SceneDrawer } from "@/components/editor/SceneDrawer";
 import { RemotionPlayer } from "@/components/player/RemotionPlayer";
+import { ExportModal } from "@/components/editor/ExportModal";
 
 const INITIAL_PLAN: FullVideoPlan = {
   title: "Building Real-Time Microservices with Redis",
@@ -74,6 +76,10 @@ export default function EditorPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSynthesizing, setIsSynthesizing] = useState(false);
   const [generationSource, setGenerationSource] = useState<"gemini" | "fallback" | null>(null);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const playerRef = useRef<PlayerRef | null>(null);
+
+  const totalFrames = Math.max(30, plan.scenes.length * 90);
 
   const handleGenerate = async (prompt: string) => {
     try {
@@ -169,7 +175,7 @@ export default function EditorPage() {
           <Button
             variant="outline"
             className="text-xs gap-1.5 border-zinc-700 text-zinc-300 hover:bg-zinc-800 h-8"
-            onClick={() => alert("MP4 export engine is ready for Phase 4 (WebCodecs client-side muxer)!")}
+            onClick={() => setIsExportModalOpen(true)}
           >
             <Download className="w-3.5 h-3.5 text-blue-400" />
             <span>Export MP4</span>
@@ -199,6 +205,7 @@ export default function EditorPage() {
         <section className="lg:col-span-5 flex flex-col items-center">
           <div className="sticky top-20 flex flex-col items-center w-full">
             <RemotionPlayer
+              playerRef={playerRef}
               plan={plan}
               audioUrl={audioUrl}
               wordTimestamps={wordTimestamps}
@@ -206,6 +213,14 @@ export default function EditorPage() {
           </div>
         </section>
       </main>
+
+      <ExportModal
+        open={isExportModalOpen}
+        onOpenChange={setIsExportModalOpen}
+        playerRef={playerRef}
+        totalFrames={totalFrames}
+        title={plan.title}
+      />
     </div>
   );
 }

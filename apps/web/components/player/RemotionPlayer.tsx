@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Player } from "@remotion/player";
+import { Player, type PlayerRef } from "@remotion/player";
 import type { FullVideoPlan } from "@motion/schema";
 import { MainVideo, VIDEO_CONFIG } from "@motion/video";
 
@@ -14,6 +14,7 @@ export interface RemotionPlayerProps {
     endMs: number;
   }>;
   readonly defaultSceneDurationFrames?: number;
+  readonly playerRef?: React.Ref<PlayerRef>;
 }
 
 export const RemotionPlayer: React.FC<RemotionPlayerProps> = ({
@@ -21,6 +22,7 @@ export const RemotionPlayer: React.FC<RemotionPlayerProps> = ({
   audioUrl,
   wordTimestamps,
   defaultSceneDurationFrames = 90,
+  playerRef,
 }) => {
   const totalFrames = Math.max(30, plan.scenes.length * defaultSceneDurationFrames);
 
@@ -29,6 +31,7 @@ export const RemotionPlayer: React.FC<RemotionPlayerProps> = ({
       {/* 9:16 Vertical Video Frame */}
       <div className="relative w-full max-w-[360px] aspect-[9/16] rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/10 border border-zinc-800 bg-zinc-950">
         <Player
+          ref={playerRef}
           component={MainVideo}
           inputProps={{
             plan,
