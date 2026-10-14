@@ -1,6 +1,6 @@
 import React from "react";
 import { interpolate, useCurrentFrame, useVideoConfig } from "remotion";
-import { THEME_COLORS } from "../styles/theme.js";
+import { THEME_COLORS } from "../styles/theme";
 
 export interface Point {
   readonly x: number;

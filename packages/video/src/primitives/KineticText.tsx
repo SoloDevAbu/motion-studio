@@ -1,6 +1,6 @@
 import React from "react";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { SPRING_PRESETS, THEME_COLORS, VIDEO_CONFIG } from "../styles/theme.js";
+import { SPRING_PRESETS, THEME_COLORS, VIDEO_CONFIG } from "../styles/theme";
 
 export type WordTimestamp = {
   readonly word: string;

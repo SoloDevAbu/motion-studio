@@ -2,13 +2,13 @@ import React from "react";
 import { Composition } from "remotion";
 import { z } from "zod/v4";
 import { FullVideoPlanSchema, type FullVideoPlan } from "@motion/schema";
-import { MainVideo, type MainVideoProps } from "./compositions/MainVideo.js";
-import { AnimatedPath, type AnimatedPathProps } from "./primitives/AnimatedPath.js";
-import { Comparison, type ComparisonProps } from "./primitives/Comparison.js";
-import { FlowNode, type FlowNodeProps } from "./primitives/FlowNode.js";
-import { KineticText, type KineticTextProps } from "./primitives/KineticText.js";
-import { StatCounter, type StatCounterProps } from "./primitives/StatCounter.js";
-import { VIDEO_CONFIG } from "./styles/theme.js";
+import { MainVideo, type MainVideoProps } from "./compositions/MainVideo";
+import { AnimatedPath, type AnimatedPathProps } from "./primitives/AnimatedPath";
+import { Comparison, type ComparisonProps } from "./primitives/Comparison";
+import { FlowNode, type FlowNodeProps } from "./primitives/FlowNode";
+import { KineticText, type KineticTextProps } from "./primitives/KineticText";
+import { StatCounter, type StatCounterProps } from "./primitives/StatCounter";
+import { VIDEO_CONFIG } from "./styles/theme";
 
 const DEFAULT_PLAN: FullVideoPlan = {
   title: "Building Real-Time Microservices",

@@ -7,12 +7,12 @@ import {
   useVideoConfig,
 } from "remotion";
 import type { FullVideoPlan } from "@motion/schema";
-import { AnimatedPath } from "../primitives/AnimatedPath.js";
-import { Comparison } from "../primitives/Comparison.js";
-import { FlowNode } from "../primitives/FlowNode.js";
-import { KineticText, type WordTimestamp } from "../primitives/KineticText.js";
-import { StatCounter } from "../primitives/StatCounter.js";
-import { THEME_COLORS, VIDEO_CONFIG } from "../styles/theme.js";
+import { AnimatedPath } from "../primitives/AnimatedPath";
+import { Comparison } from "../primitives/Comparison";
+import { FlowNode } from "../primitives/FlowNode";
+import { KineticText, type WordTimestamp } from "../primitives/KineticText";
+import { StatCounter } from "../primitives/StatCounter";
+import { THEME_COLORS, VIDEO_CONFIG } from "../styles/theme";
 
 export type MainVideoProps = {
   readonly plan: FullVideoPlan;

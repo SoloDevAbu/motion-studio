@@ -1,6 +1,6 @@
 import React from "react";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { SPRING_PRESETS, THEME_COLORS } from "../styles/theme.js";
+import { SPRING_PRESETS, THEME_COLORS } from "../styles/theme";
 
 export type StatCounterProps = {
   readonly value: number;

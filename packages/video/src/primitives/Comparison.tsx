@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
-import { SPRING_PRESETS, THEME_COLORS } from "../styles/theme.js";
+import { SPRING_PRESETS, THEME_COLORS } from "../styles/theme";
 
 export type ComparisonSide = {
   readonly title: string;
