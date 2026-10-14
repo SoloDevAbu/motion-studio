@@ -11,7 +11,15 @@ import {
   DialogFooter,
 } from "@workspace/ui/components/dialog";
 import { Button } from "@workspace/ui/components/button";
+import { Badge } from "@workspace/ui/components/badge";
 import { Progress } from "@workspace/ui/components/progress";
+import { Separator } from "@workspace/ui/components/separator";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@workspace/ui/components/card";
 import {
   Download,
   Loader2,
@@ -77,7 +85,7 @@ export const ExportModal: React.FC<ExportModalProps> = ({
         filename: `${sanitizedFilename}.mp4`,
         showWatermark: true,
         abortSignal: controller.signal,
-        onProgress: (p, frame, total) => {
+        onProgress: (p, frame) => {
           setProgress(p);
           setCurrentFrame(frame);
         },
@@ -121,27 +129,27 @@ export const ExportModal: React.FC<ExportModalProps> = ({
 
   return (
     <Dialog open={open} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-md bg-zinc-950 border border-zinc-800 text-zinc-100 p-6">
-        <DialogHeader className="gap-1.5 text-left">
-          <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400">
-              <Film className="w-5 h-5" />
+      <DialogContent className="sm:max-w-md bg-background border-border text-foreground p-6">
+        <DialogHeader className="gap-2 text-left">
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <Film className="size-4" />
             </div>
             <div>
-              <DialogTitle className="text-base font-semibold text-zinc-100">
-                Export MP4 Video
+              <DialogTitle className="text-sm font-semibold">
+                Export 1080×1920 MP4 Video
               </DialogTitle>
-              <DialogDescription className="text-xs text-zinc-400">
-                Fast, hardware-accelerated 1080×1920 render directly in your browser.
+              <DialogDescription className="text-xs text-muted-foreground">
+                Hardware-accelerated client-side rendering powered by WebCodecs.
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
+        <div className="flex flex-col gap-4 py-2">
           {!isSupported && (
-            <div className="flex items-start gap-2.5 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2.5 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs">
+              <AlertTriangle className="size-4 shrink-0 mt-0.5" />
               <span>
                 WebCodecs is not supported in this browser. Please use Chrome, Edge, or Safari 16.4+ to export videos.
               </span>
@@ -149,69 +157,78 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           )}
 
           {/* Export specs card */}
-          <div className="p-3.5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 space-y-2 text-xs">
-            <div className="flex justify-between items-center text-zinc-400">
-              <span>Resolution:</span>
-              <span className="font-mono text-zinc-200">1080 × 1920 (9:16)</span>
-            </div>
-            <div className="flex justify-between items-center text-zinc-400">
-              <span>Framerate & Bitrate:</span>
-              <span className="font-mono text-zinc-200">30 FPS · 6.0 Mbps</span>
-            </div>
-            <div className="flex justify-between items-center text-zinc-400">
-              <span>Total Frames:</span>
-              <span className="font-mono text-zinc-200">{totalFrames} frames ({(totalFrames / 30).toFixed(1)}s)</span>
-            </div>
-            <div className="flex justify-between items-center text-zinc-400">
-              <span>Renderer Engine:</span>
-              <span className="text-blue-400 font-medium">In-Browser WebCodecs (Zero Cost)</span>
-            </div>
-          </div>
+          <Card className="border-border/60 bg-muted/30">
+            <CardContent className="flex flex-col gap-2 p-3.5 text-xs">
+              <div className="flex justify-between items-center text-muted-foreground">
+                <span>Output Canvas:</span>
+                <Badge variant="outline" className="font-mono">1080 × 1920 (9:16 Vertical)</Badge>
+              </div>
+              <div className="flex justify-between items-center text-muted-foreground">
+                <span>Codec & Bitrate:</span>
+                <span className="font-mono text-foreground font-medium">H.264 High Profile · 6.0 Mbps</span>
+              </div>
+              <div className="flex justify-between items-center text-muted-foreground">
+                <span>Duration:</span>
+                <span className="font-mono text-foreground font-medium">
+                  {totalFrames} frames ({(totalFrames / 30).toFixed(1)}s @ 30 FPS)
+                </span>
+              </div>
+              <Separator />
+              <div className="flex justify-between items-center text-muted-foreground">
+                <span>Rendering Engine:</span>
+                <Badge variant="secondary" className="text-primary font-medium">
+                  Zero Server Cost ($0)
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Progress Section */}
           {(isExporting || isComplete || errorMessage) && (
-            <div className="space-y-2.5 p-3.5 rounded-xl bg-zinc-900/90 border border-zinc-800">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-zinc-300 font-medium truncate max-w-[240px]">
-                  {statusText}
-                </span>
-                <span className="text-zinc-400 font-mono text-[11px] tabular-nums">
-                  {progress}%
-                </span>
-              </div>
-
-              <Progress value={progress} className="w-full" />
-
-              <div className="flex justify-between items-center text-[11px] text-zinc-500 pt-1">
-                <span>
-                  {isExporting ? `Rendering frame ${currentFrame} / ${totalFrames}` : isComplete ? "Completed" : "Stopped"}
-                </span>
-                {isExporting && (
-                  <span className="flex items-center gap-1 text-blue-400">
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                    <span>Encoding H.264...</span>
+            <Card className="border-border bg-card">
+              <CardContent className="flex flex-col gap-2.5 p-3.5">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-foreground font-medium truncate max-w-[240px]">
+                    {statusText}
                   </span>
-                )}
-                {isComplete && (
-                  <span className="flex items-center gap-1 text-emerald-400 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Saved to downloads</span>
+                  <span className="text-muted-foreground font-mono text-[11px] tabular-nums">
+                    {progress}%
                   </span>
-                )}
-              </div>
-            </div>
+                </div>
+
+                <Progress value={progress} className="w-full" />
+
+                <div className="flex justify-between items-center text-[11px] text-muted-foreground pt-1">
+                  <span>
+                    {isExporting ? `Frame ${currentFrame} / ${totalFrames}` : isComplete ? "Finished" : "Aborted"}
+                  </span>
+                  {isExporting && (
+                    <span className="flex items-center gap-1 text-primary">
+                      <Loader2 className="size-3 animate-spin" />
+                      <span>Encoding...</span>
+                    </span>
+                  )}
+                  {isComplete && (
+                    <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                      <CheckCircle2 className="size-3.5" />
+                      <span>Saved to downloads</span>
+                    </span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           )}
 
           {errorMessage && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
+            <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-xs">
               {errorMessage}
             </div>
           )}
 
           {/* Watermark notice */}
-          <div className="flex items-center gap-2 text-[11px] text-zinc-500 px-1">
-            <Sparkles className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
-            <span>Includes discreet &quot;Made with MotionCraft.studio&quot; badge in bottom corner.</span>
+          <div className="flex items-center gap-2 text-[11px] text-muted-foreground px-1">
+            <Sparkles className="size-3 text-primary shrink-0" />
+            <span>Free export includes discreet &quot;Made with MotionCraft.studio&quot; corner watermark.</span>
           </div>
         </div>
 
@@ -220,7 +237,8 @@ export const ExportModal: React.FC<ExportModalProps> = ({
             <Button
               type="button"
               variant="outline"
-              className="text-xs border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              size="sm"
+              className="text-xs"
               onClick={handleCancel}
             >
               Cancel Render
@@ -228,10 +246,11 @@ export const ExportModal: React.FC<ExportModalProps> = ({
           ) : isComplete ? (
             <Button
               type="button"
-              className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white gap-1.5"
+              size="sm"
+              className="text-xs gap-1.5"
               onClick={() => onOpenChange(false)}
             >
-              <CheckCircle2 className="w-3.5 h-3.5" />
+              <CheckCircle2 className="size-3.5" />
               Done
             </Button>
           ) : (
@@ -239,18 +258,20 @@ export const ExportModal: React.FC<ExportModalProps> = ({
               <Button
                 type="button"
                 variant="ghost"
-                className="text-xs text-zinc-400 hover:text-zinc-200"
+                size="sm"
+                className="text-xs text-muted-foreground hover:text-foreground"
                 onClick={() => onOpenChange(false)}
               >
                 Close
               </Button>
               <Button
                 type="button"
-                className="text-xs bg-blue-600 hover:bg-blue-500 text-white gap-1.5"
+                size="sm"
+                className="text-xs gap-1.5 font-medium shadow-md shadow-primary/20"
                 disabled={!isSupported}
                 onClick={handleStartExport}
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="size-3.5" />
                 Start MP4 Export
               </Button>
             </>
